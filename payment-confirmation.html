@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Confirmation - Victory Badminton</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <div class="header-content">
+        <img src="assets/VICTORY1.png" alt="Victory Logo" class="logo" />
+      </div>
+    </header>
+
+    <div class="main-content payment-confirmation-page">
+      <div class="payment-status-header">
+        <h1>Payment Details</h1>
+        <div class="payment-id"></div>
+        <div class="payment-timer">
+          <i class="fas fa-clock"></i>
+          Time remaining: <span id="countdown"></span>
+        </div>
+      </div>
+
+      <div class="payment-details-container">
+        <!-- Bank Transfer Information -->
+        <div class="payment-info-section">
+          <h2>Payment Information</h2>
+          <div class="bank-details">
+            <div class="bank-account">
+              <!-- Bank info akan diisi secara dinamis -->
+            </div>
+            <div class="total-amount">
+              <!-- Total amount akan diisi secara dinamis -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Upload Bukti Transfer -->
+        <div class="upload-section">
+          <h2>Upload Payment Proof</h2>
+          <div class="upload-area" id="uploadArea">
+            <input type="file" id="paymentProof" accept="image/*" hidden>
+            <div class="upload-content">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p>Click or drag image here</p>
+              <span>Support: JPG, PNG (max. 2MB)</span>
+            </div>
+          </div>
+          <button class="confirm-upload-btn" disabled>
+            Confirm Payment
+          </button>
+        </div>
+
+        <!-- Order Details -->
+        <div class="order-details-section">
+          <h2>Order Details</h2>
+          <div class="booking-details">
+            <!-- Booking details akan diisi secara dinamis -->
+          </div>
+
+          <div class="order-summary">
+            <!-- Order summary akan diisi secara dinamis -->
+          </div>
+        </div>
+
+        <!-- How to Pay -->
+        <div class="how-to-pay-section">
+          <h2>How to Pay</h2>
+          <div class="steps-container">
+            <div class="step">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h4>Copy Payment Details</h4>
+                <p>Copy account number and total payment amount</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h4>Make Payment</h4>
+                <p>Transfer to the provided account number</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h4>Upload Proof</h4>
+                <p>Upload your payment proof</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Note untuk DP -->
+        <div class="payment-note" id="dpNote" style="display: none;">
+          <i class="fas fa-info-circle"></i>
+          <p>Please complete the remaining payment within 1 hour to confirm your booking</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+    <div class="loading-content">
+      <i class="fas fa-spinner fa-spin"></i>
+      <p>Loading payment details...</p>
+    </div>
+  </div>
+
+  <script src="payment-confirmation.js"></script>
+</body>
+</html> 

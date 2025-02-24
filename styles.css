@@ -1,0 +1,2301 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #000;
+  color: white;
+}
+
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+/* Header */
+header {
+  padding: 1rem;
+}
+
+.header-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  height: 150px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Main Content */
+.main-content {
+  padding: 1rem;
+}
+
+/* Tambahkan style untuk week navigation */
+.week-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.nav-btn:hover {
+  background-color: rgba(75, 105, 191, 0.1);
+  border-radius: 4px;
+}
+
+.current-month {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: white;
+}
+
+/* Update margin untuk date-selector karena ada elemen baru di atasnya */
+.date-selector {
+  margin-bottom: 1.5rem;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.dates {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+}
+
+.date-btn {
+  background: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.date-btn.selected {
+  background-color: var(--primary-red);
+  color: white;
+}
+
+/* Update Schedule Grid */
+.schedule-grid {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 1px;
+  background-color: #333;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.courts-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.court-headers {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1px;
+  background-color: #111;
+  border-bottom: 1px solid #333;
+}
+
+.court-header {
+  padding: 1rem;
+  text-align: center;
+  font-weight: 500;
+  color: #9ca3af;
+  background-color: #111;
+}
+
+.courts-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1px;
+}
+
+/* Pastikan tinggi slot waktu dan court sama */
+.time-slot,
+.court-slot {
+  height: 80px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #111;
+}
+
+.time-slot {
+  justify-content: flex-end;
+}
+
+.time-column {
+  display: grid;
+  gap: 1px;
+}
+
+.time-slot {
+  padding: 1rem;
+  text-align: right;
+  background-color: #111;
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+
+.court-slot {
+  padding: 1rem;
+  text-align: center;
+  background-color: #111;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.court-slot.available:hover {
+  background-color: rgba(75, 105, 191, 0.3);
+}
+
+.court-slot.booked {
+  background-color: rgba(75, 105, 191, 0.2);
+  color: var(--secondary-blue);
+  cursor: not-allowed;
+}
+
+.booked-text {
+  font-weight: 500;
+}
+
+.title-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  position: relative;
+  padding-top: 3rem; /* Beri ruang untuk city selector */
+}
+
+.calendar-icon-container {
+  width: 50px;
+  height: 50px;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s;
+}
+
+.calendar-icon-container:hover {
+  background-color: var(--light-gray);
+}
+
+.calendar-icon-container i {
+  color: var(--primary-blue);
+  font-size: 1.5rem;
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #111;
+  margin: 5% auto;
+  padding: 2rem;
+  width: 90%;
+  max-width: 1000px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  font-size: 1.5rem;
+  color: var(--light-gray);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+  z-index: 10;
+}
+
+.close-btn:hover {
+  color: white;
+}
+
+.court-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.court-detail {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: left;
+}
+
+.court-detail img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.court-detail h3 {
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.court-detail p {
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+
+.court-description {
+  color: #9ca3af;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+}
+
+.features-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.feature-tag {
+  background: rgba(75, 105, 191, 0.3);
+  color: var(--secondary-blue);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+.court-price {
+  color: var(--secondary-blue);
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+/* Mobile First Styles */
+@media screen and (max-width: 768px) {
+  .logo {
+    height: 100px; /* Ukuran logo lebih kecil di mobile */
+  }
+
+  .main-content {
+    padding: 0.5rem;
+  }
+
+  .title-section h2 {
+    font-size: 1.2rem;
+  }
+
+  .calendar-icon-container {
+    width: 40px;
+    height: 40px;
+  }
+
+  .calendar-icon-container i {
+    font-size: 1.2rem;
+  }
+
+  /* Week Navigation */
+  .week-navigation {
+    padding: 0.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .nav-btn {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .current-month {
+    font-size: 1rem;
+  }
+
+  /* Date Selector */
+  .weekdays {
+    font-size: 0.8rem;
+  }
+
+  .date-btn {
+    padding: 0.25rem;
+  }
+
+  .date-btn .date {
+    font-size: 1rem;
+  }
+
+  .date-btn .month {
+    font-size: 0.7rem;
+  }
+
+  /* Schedule Grid */
+  .schedule-grid {
+    grid-template-columns: 50px 1fr;
+    max-height: calc(100vh - 300px);
+  }
+
+  .time-slot,
+  .court-slot {
+    height: 60px;
+    padding: 0.5rem;
+  }
+
+  .time-slot {
+    font-size: 0.8rem;
+  }
+
+  .court-slot {
+    font-size: 0.9rem;
+  }
+
+  .booked-text {
+    font-size: 0.7rem;
+  }
+
+  /* Modal */
+  .modal-content {
+    margin: 2% auto;
+    padding: 1rem;
+    width: 95%;
+  }
+
+  .close-btn {
+    font-size: 1.5rem;
+    right: 0.5rem;
+    top: 0.5rem;
+  }
+
+  .court-details-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .court-detail img {
+    height: 150px;
+  }
+
+  .court-detail h3 {
+    font-size: 1.1rem;
+  }
+
+  .court-detail p {
+    font-size: 0.8rem;
+  }
+
+  .court-detail {
+    padding: 1rem;
+  }
+
+  .features-container {
+    margin: 0.75rem 0;
+  }
+
+  .feature-tag {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+  }
+}
+
+/* Tambahkan scroll horizontal untuk court grid di mobile */
+@media screen and (max-width: 480px) {
+  .courts-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .court-headers {
+    min-width: 500px;
+  }
+
+  .courts-grid {
+    min-width: 500px;
+  }
+
+  .court-header {
+    min-width: 100px;
+  }
+
+  .time-slot,
+  .court-slot {
+    height: 50px;
+  }
+}
+
+/* Booking Modal Styles */
+.booking-modal {
+  max-width: 600px;
+  height: 90vh;
+  overflow-y: auto;
+  padding-bottom: 1rem;
+}
+
+.booking-form {
+  margin-top: 1rem;
+}
+
+/* Hapus overflow dan flex dari booking-content */
+.booking-content {
+  padding-right: 0;
+}
+
+/* Update booking summary agar tidak sticky */
+.booking-summary {
+  position: relative;
+  background-color: #111;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  border-top: 1px solid #333;
+}
+
+.booking-info {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.booking-info p {
+  margin: 0.75rem 0;
+  color: var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.booking-info p:first-child {
+  margin-top: 0;
+}
+
+.booking-info p:last-child {
+  margin-bottom: 0;
+}
+
+.booking-info p span {
+  color: white;
+  font-weight: 500;
+}
+
+/* Tambahkan style khusus untuk harga per jam */
+#pricePerHour {
+  color: var(--secondary-blue);
+  font-weight: 600;
+}
+
+/* Snacks Section Styles */
+.snacks-section {
+  margin: 2rem -2rem;
+  padding: 0 2rem;
+}
+
+.snacks-swiper {
+  padding: 1rem 0;
+}
+
+.swiper-slide {
+  height: auto;
+  padding: 0.5rem;
+}
+
+.snack-item {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.snack-item img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  background: white;
+  border-radius: 8px;
+  padding: 0.5rem;
+}
+
+.snack-item h4 {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: white;
+}
+
+.snack-item p {
+  color: var(--secondary-blue);
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.qty-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: var(--primary-blue);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.qty-btn:hover {
+  background: var(--dark-blue);
+}
+
+.qty-input {
+  width: 40px;
+  height: 32px;
+  border: 1px solid var(--dark-gray);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* Swiper Navigation Styles */
+.swiper-button-next,
+.swiper-button-prev {
+  color: var(--primary-blue);
+}
+
+.swiper-pagination-bullet {
+  background: var(--primary-blue);
+}
+
+/* Mobile Styles */
+@media screen and (max-width: 768px) {
+  .snacks-section {
+    margin: 1rem -1rem;
+    padding: 0 1rem;
+  }
+
+  .snack-item {
+    padding: 0.75rem;
+  }
+
+  .snack-item img {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 0.75rem;
+  }
+
+  .snack-item h4 {
+    font-size: 0.9rem;
+    margin: 0.25rem 0;
+  }
+
+  .snack-item p {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .quantity-control {
+    gap: 0.25rem;
+  }
+
+  .qty-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .qty-input {
+    width: 36px;
+    height: 28px;
+    font-size: 0.8rem;
+  }
+
+  /* Adjust swiper for mobile */
+  .swiper-slide {
+    width: 160px;
+    padding: 0.25rem;
+  }
+}
+
+/* Update modal untuk court details */
+#courtDetailsModal .modal-content {
+  max-width: 1200px;
+}
+
+/* Update color variables */
+:root {
+  --primary-blue: #4b69bf; /* Biru dari logo */
+  --primary-red: #e31e24; /* Merah dari logo */
+  --secondary-blue: #6b86d4; /* Biru lebih terang */
+  --dark-blue: #2a3b6b; /* Biru lebih gelap */
+  --light-gray: #9ca3af; /* Abu-abu terang */
+  --dark-gray: #333; /* Abu-abu gelap */
+}
+
+/* City Selector Styles */
+.city-selector {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.select-wrapper i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--primary-blue);
+  z-index: 1;
+  font-size: 1rem;
+}
+
+.city-selector select {
+  padding: 8px 12px 8px 35px;
+  border-radius: 6px;
+  background-color: #111;
+  color: white;
+  border: 1px solid var(--primary-blue);
+  cursor: pointer;
+  font-size: 0.9rem;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  min-width: 180px;
+  padding-right: 30px;
+}
+
+/* Tambah custom arrow */
+.select-wrapper::after {
+  content: '\f107';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--primary-blue);
+  pointer-events: none;
+}
+
+.city-selector select:focus {
+  outline: none;
+  border-color: var(--secondary-blue);
+}
+
+/* Hover effect */
+.city-selector select:hover {
+  border-color: var(--secondary-blue);
+  background-color: rgba(75, 105, 191, 0.1);
+}
+
+/* Mobile adjustment */
+@media screen and (max-width: 768px) {
+  .city-selector select {
+    min-width: 150px;
+    font-size: 0.8rem;
+    padding: 6px 10px 6px 30px;
+  }
+  
+  .select-wrapper i {
+    font-size: 0.9rem;
+  }
+}
+
+/* Duration Control Styles */
+.duration-container {
+  display: flex;
+  align-items: center !important;
+  gap: 1.5rem;
+  padding: 0.5rem 0;
+}
+
+.duration-control {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(75, 105, 191, 0.1);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(75, 105, 191, 0.2);
+  flex: 1;
+}
+
+.duration-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: var(--primary-blue);
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.duration-btn:hover {
+  background: var(--dark-blue);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.duration-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.duration-btn:disabled {
+  background: var(--dark-gray);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  opacity: 0.5;
+}
+
+.duration-btn i {
+  font-size: 0.8rem;
+}
+
+.duration-display {
+  flex: 1;
+  text-align: center;
+  position: relative;
+  padding: 0 0.5rem;
+}
+
+#durationInput {
+  width: 40px;
+  text-align: center;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding: 0;
+  margin-bottom: 2px;
+}
+
+.duration-labels {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.duration-unit {
+  color: var(--secondary-blue);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.duration-range {
+  color: var(--light-gray);
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+/* Mobile adjustment */
+@media screen and (max-width: 768px) {
+  .duration-container {
+    gap: 1rem;
+  }
+
+  .duration-control {
+    padding: 6px 10px;
+  }
+
+  .duration-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  #durationInput {
+    font-size: 1.2rem;
+  }
+
+  .duration-unit {
+    font-size: 0.75rem;
+  }
+
+  .duration-range {
+    font-size: 0.65rem;
+  }
+}
+
+/* Payment Modal Styles */
+.payment-modal {
+  max-width: 500px;
+  height: 90vh;
+  overflow-y: auto;
+  padding-bottom: 1rem;
+}
+
+.payment-form {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Payment Summary - buat sticky di bawah */
+.payment-summary {
+  position: sticky;
+  bottom: 0;
+  background-color: #111;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-top: 1px solid var(--dark-gray);
+  border-radius: 8px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Update mobile styles */
+@media screen and (max-width: 768px) {
+  .payment-modal {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+    padding: 1rem;
+  }
+
+  .payment-form {
+    gap: 1rem;
+  }
+
+  .payment-summary {
+    margin: 1rem -1rem -1rem -1rem;
+    padding: 1rem;
+    border-radius: 0;
+  }
+}
+
+/* Promo Section */
+.promo-section {
+  margin-bottom: 2rem;
+}
+
+.promo-input {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.promo-input input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid var(--dark-gray);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.apply-promo-btn {
+  padding: 0.75rem 1.5rem;
+  background: var(--primary-blue);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.apply-promo-btn:hover {
+  background: var(--dark-blue);
+}
+
+/* Payment Options */
+.payment-options {
+  margin-bottom: 2rem;
+}
+
+.payment-type {
+  margin: 1rem 0;
+}
+
+.payment-choice {
+  margin-bottom: 1rem;
+}
+
+.payment-choice label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--dark-gray);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.payment-choice input[type="radio"] {
+  display: none;
+}
+
+.payment-choice input[type="radio"]:checked + label {
+  border-color: var(--primary-blue);
+  background: rgba(75, 105, 191, 0.1);
+}
+
+.payment-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Payment Methods */
+.payment-methods {
+  margin-top: 2rem;
+}
+
+.method-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.method-choice {
+  margin-bottom: 1rem;
+}
+
+.payment-method-label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--dark-gray);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.payment-method-logo {
+  width: 80px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bank-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.method-choice input[type="radio"] {
+  display: none;
+}
+
+.method-choice input[type="radio"]:checked + .payment-method-label {
+  border-color: var(--primary-blue);
+  background: rgba(75, 105, 191, 0.1);
+}
+
+/* Payment Summary */
+.payment-summary {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--dark-gray);
+}
+
+.summary-details {
+  margin: 1rem 0;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+  color: var(--light-gray);
+}
+
+.summary-row.total {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--dark-gray);
+  color: white;
+}
+
+.payment-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(227, 30, 36, 0.1);
+  border-radius: 6px;
+  margin: 1rem 0;
+}
+
+.payment-note i {
+  color: var(--primary-red);
+}
+
+.payment-note p {
+  font-size: 0.9rem;
+  color: var(--light-gray);
+  margin: 0;
+}
+
+.confirm-payment-btn {
+  width: 100%;
+  padding: 1rem;
+  background: var(--primary-blue);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.confirm-payment-btn:hover {
+  background: var(--dark-blue);
+}
+
+/* Update existing button */
+.next-btn {
+  width: 100%;
+  padding: 1rem;
+  background: var(--primary-blue);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-top: 1rem;
+  transition: background 0.2s;
+}
+
+.next-btn:hover {
+  background: var(--dark-blue);
+}
+
+/* Mobile Adjustments */
+@media screen and (max-width: 768px) {
+  .method-options {
+    grid-template-columns: 1fr;
+  }
+
+  .payment-choice label,
+  .method-choice label {
+    padding: 0.75rem;
+  }
+
+  .promo-input {
+    flex-direction: column;
+  }
+
+  .apply-promo-btn {
+    width: 100%;
+  }
+}
+
+/* Modal Header with Back Button */
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.modal-header h2 {
+  margin: 0;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  color: var(--primary-blue);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  color: var(--secondary-blue);
+  transform: translateX(-2px);
+}
+
+.back-btn i {
+  font-size: 1rem;
+}
+
+/* Update payment modal padding */
+.payment-modal {
+  padding: 1.5rem;
+}
+
+/* Mobile adjustments */
+@media screen and (max-width: 768px) {
+  .back-btn {
+    padding: 0.5rem;
+  }
+  
+  .back-btn span {
+    display: none;
+  }
+}
+
+/* Payment Modal Mobile Styles */
+@media screen and (max-width: 768px) {
+  .payment-modal {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+    padding: 1rem;
+  }
+
+  .modal-header h2 {
+    font-size: 1.5rem;
+  }
+
+  /* Promo Section */
+  .promo-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .promo-input input {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .apply-promo-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* Payment Options */
+  .payment-options h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .payment-choice label {
+    padding: 0.75rem;
+  }
+
+  .payment-label {
+    font-size: 0.9rem;
+  }
+
+  .payment-amount {
+    font-size: 0.9rem;
+  }
+
+  /* Payment Methods */
+  .payment-methods h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .method-choice label {
+    padding: 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .method-choice img {
+    height: 32px;
+  }
+
+  /* Payment Summary */
+  .payment-summary {
+    padding: 1rem;
+  }
+
+  .payment-summary h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .summary-row {
+    font-size: 0.9rem;
+    margin: 0.4rem 0;
+  }
+
+  .summary-row.total {
+    font-size: 1rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+  }
+
+  .payment-note {
+    padding: 0.75rem;
+  }
+
+  .payment-note i {
+    font-size: 1rem;
+  }
+
+  .payment-note p {
+    font-size: 0.8rem;
+  }
+
+  .confirm-payment-btn {
+    padding: 0.875rem;
+    font-size: 1rem;
+  }
+
+  /* Adjust spacing */
+  .payment-form {
+    gap: 1.25rem;
+  }
+
+  .payment-type {
+    margin: 0.75rem 0;
+  }
+
+  .payment-choice {
+    margin-bottom: 0.75rem;
+  }
+
+  .method-options {
+    gap: 0.75rem;
+  }
+}
+
+/* Smaller mobile devices */
+@media screen and (max-width: 375px) {
+  .modal-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .payment-label,
+  .payment-amount,
+  .summary-row {
+    font-size: 0.85rem;
+  }
+
+  .method-choice img {
+    height: 28px;
+  }
+
+  .confirm-payment-btn {
+    padding: 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  .payment-note p {
+    font-size: 0.75rem;
+  }
+}
+
+/* Upload Section Styles */
+.upload-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.upload-section h2 {
+  color: var(--secondary-blue);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.upload-section h2::before {
+  content: '\f574';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  font-size: 1.1rem;
+}
+
+.upload-area {
+  border: 2px dashed rgba(75, 105, 191, 0.3);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 1rem 0;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(75, 105, 191, 0.05);
+}
+
+.upload-area:hover {
+  border-color: var(--primary-blue);
+  background: rgba(75, 105, 191, 0.1);
+  transform: translateY(-2px);
+}
+
+.upload-area.drag-over {
+  border-color: var(--secondary-blue);
+  background: rgba(75, 105, 191, 0.15);
+  transform: scale(1.02);
+}
+
+.upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.upload-content i {
+  font-size: 3.5rem;
+  color: var(--primary-blue);
+  margin-bottom: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.upload-area:hover .upload-content i {
+  transform: translateY(-5px);
+}
+
+.upload-content p {
+  font-size: 1.1rem;
+  color: white;
+  margin: 0;
+  font-weight: 500;
+}
+
+.upload-content span {
+  font-size: 0.85rem;
+  color: var(--light-gray);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+}
+
+/* Preview Styles */
+.preview-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 250px;
+  border-radius: 12px;
+  object-fit: contain;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.preview-info {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.file-name {
+  color: white;
+  margin: 0;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.file-size {
+  color: var(--light-gray);
+  margin: 0.25rem 0 0 0;
+  font-size: 0.85rem;
+}
+
+.change-file-btn {
+  background: rgba(75, 105, 191, 0.1);
+  border: 1px solid rgba(75, 105, 191, 0.2);
+  color: var(--primary-blue);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.change-file-btn:hover {
+  background: rgba(75, 105, 191, 0.2);
+  transform: translateY(-1px);
+}
+
+.change-file-btn i {
+  font-size: 1rem;
+}
+
+.confirm-upload-btn {
+  width: 100%;
+  padding: 1rem;
+  background: var(--primary-blue);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.confirm-upload-btn:not(:disabled):hover {
+  background: var(--dark-blue);
+  transform: translateY(-2px);
+}
+
+.confirm-upload-btn:disabled {
+  background: var(--dark-gray);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Loading States */
+.upload-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  color: var(--light-gray);
+  padding: 2rem;
+}
+
+.upload-loading i {
+  font-size: 2.5rem;
+  color: var(--primary-blue);
+}
+
+/* Mobile Adjustments */
+@media screen and (max-width: 768px) {
+  .upload-section {
+    padding: 1rem;
+  }
+
+  .upload-area {
+    padding: 1.5rem;
+    min-height: 180px;
+  }
+
+  .upload-content i {
+    font-size: 2.5rem;
+  }
+
+  .upload-content p {
+    font-size: 1rem;
+  }
+
+  .upload-content span {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .preview-image {
+    max-height: 200px;
+  }
+
+  .preview-info {
+    padding: 0.75rem;
+  }
+
+  .change-file-btn {
+    padding: 0.6rem 1rem;
+  }
+
+  .confirm-upload-btn {
+    padding: 0.875rem;
+  }
+}
+
+/* Smaller devices */
+@media screen and (max-width: 375px) {
+  .upload-content i {
+    font-size: 2rem;
+  }
+
+  .upload-content p {
+    font-size: 0.9rem;
+  }
+
+  .upload-content span {
+    font-size: 0.75rem;
+  }
+
+  .preview-image {
+    max-height: 180px;
+  }
+}
+
+/* Loading Overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loading-content {
+  text-align: center;
+  color: white;
+}
+
+.loading-content i {
+  font-size: 3rem;
+  color: var(--primary-blue);
+  margin-bottom: 1rem;
+}
+
+.loading-content p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* Floating Cart Styles */
+.floating-cart {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--primary-blue);
+  padding: 12px 20px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.cart-icon {
+  position: relative;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--primary-red);
+  color: white;
+  font-size: 12px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-total {
+  color: white;
+  font-weight: 500;
+}
+
+.view-cart-btn {
+  background: white;
+  color: var(--primary-blue);
+  border: none;
+  padding: 8px 15px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.view-cart-btn:hover {
+  background: var(--light-gray);
+}
+
+/* Cart Modal Styles */
+.cart-modal {
+  max-width: 600px;
+}
+
+.cart-items {
+  margin: 1.5rem 0;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.cart-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.cart-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.cart-item-info {
+  flex: 1;
+}
+
+.cart-duration-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+}
+
+.cart-duration-control button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: var(--primary-blue);
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.cart-duration-control button:hover {
+  background: var(--dark-blue);
+}
+
+.cart-duration-control button:disabled {
+  background: var(--dark-gray);
+  cursor: not-allowed;
+}
+
+.cart-duration-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 80px;
+  justify-content: center;
+}
+
+.cart-duration-value {
+  font-weight: 500;
+  color: white;
+}
+
+.cart-duration-label {
+  color: var(--light-gray);
+  font-size: 0.9rem;
+}
+
+.cart-item-title {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.cart-item-details {
+  font-size: 0.9rem;
+  color: var(--light-gray);
+}
+
+.cart-item-price {
+  font-weight: 500;
+  color: var(--secondary-blue);
+}
+
+.remove-item {
+  background: none;
+  border: none;
+  color: var(--primary-red);
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-left: 1rem;
+  transition: all 0.2s;
+}
+
+.remove-item:hover {
+  transform: scale(1.1);
+}
+
+.cart-summary {
+  border-top: 1px solid var(--dark-gray);
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
+
+.checkout-btn {
+  width: 100%;
+  padding: 1rem;
+  background: var(--primary-blue);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-top: 1rem;
+  transition: background 0.2s;
+}
+
+.checkout-btn:hover {
+  background: var(--dark-blue);
+}
+
+@media screen and (max-width: 768px) {
+  .floating-cart {
+    bottom: 0;
+    right: 0;
+    left: 0;
+    border-radius: 0;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background: rgba(75, 105, 191, 0.95);
+    backdrop-filter: blur(10px);
+  }
+
+  .cart-icon i {
+    font-size: 1.2rem;
+  }
+
+  .cart-total {
+    font-size: 0.9rem;
+  }
+
+  .view-cart-btn {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+
+  .booking-modal {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+    padding: 1rem;
+  }
+
+  .booking-content {
+    padding: 1rem;
+  }
+
+  .location-info {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .courts-info {
+    margin-bottom: 1rem;
+  }
+
+  .court-item {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .booking-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .meta-item {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .modal-content {
+    padding: 1rem;
+  }
+
+  .snacks-section {
+    margin: 1rem -1rem;
+  }
+
+  .snack-item {
+    padding: 0.75rem;
+  }
+
+  .quantity-control {
+    margin-top: 0.5rem;
+  }
+
+  .booking-summary {
+    margin-top: 1rem;
+    padding: 1rem;
+  }
+
+  .summary-items {
+    font-size: 0.9rem;
+  }
+
+  .app-container {
+    padding-bottom: 80px;
+  }
+}
+
+/* Tambahkan di bagian court-slot styles */
+.court-slot.selected {
+  background-color: rgba(75, 105, 191, 0.3);
+  border: 2px solid var(--primary-blue);
+  position: relative;
+}
+
+.court-slot.selected::after {
+  content: '\f00c';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--secondary-blue);
+  font-size: 1.2rem;
+}
+
+.court-slot.selected:hover {
+  background-color: rgba(75, 105, 191, 0.4);
+}
+
+/* Tambahkan animasi untuk feedback */
+@keyframes selectedPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.court-slot.just-selected {
+  animation: selectedPulse 0.3s ease-in-out;
+}
+
+/* Booking Info Styles */
+.booking-info {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.booking-header {
+  background: var(--primary-blue);
+  padding: 1rem 1.5rem;
+}
+
+.booking-header h3 {
+  color: white;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.booking-content {
+  padding: 1.5rem;
+}
+
+.location-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.location-info i {
+  color: var(--primary-blue);
+  font-size: 1.2rem;
+}
+
+.location-info span {
+  color: white;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.courts-info {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.courts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.court-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+}
+
+.court-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.court-name {
+  color: white;
+  font-weight: 500;
+}
+
+.court-schedule {
+  color: var(--light-gray);
+  font-size: 0.9rem;
+}
+
+.court-price {
+  color: var(--secondary-blue);
+  font-weight: 500;
+}
+
+.booking-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.meta-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+}
+
+.meta-item i {
+  color: var(--primary-blue);
+}
+
+.meta-item span {
+  color: white;
+  font-weight: 500;
+}
+
+@media screen and (max-width: 768px) {
+  .booking-content {
+    padding: 1rem;
+  }
+
+  .meta-item {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Payment Confirmation Page Styles */
+.payment-confirmation-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* Status Header */
+.payment-status-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+}
+
+.payment-status-header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.payment-id {
+  color: var(--light-gray);
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.payment-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(227, 30, 36, 0.1);
+  border-radius: 8px;
+  color: var(--primary-red);
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+/* Container Layout */
+.payment-details-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Section Styling */
+.payment-info-section,
+.upload-section,
+.order-details-section,
+.how-to-pay-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Bank Account Info */
+.bank-account {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(75, 105, 191, 0.2);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.bank-logo {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+}
+
+.account-info {
+  flex: 1;
+}
+
+.account-number {
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: white;
+}
+
+.account-name {
+  font-size: 0.85rem;
+  color: var(--light-gray);
+  margin-top: 0.25rem;
+}
+
+/* Total Amount Display */
+.total-amount {
+  background: rgba(75, 105, 191, 0.1);
+  border: 1px solid rgba(75, 105, 191, 0.2);
+  border-radius: 10px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.total-amount strong {
+  font-size: 1.4rem;
+  color: var(--secondary-blue);
+}
+
+/* Order Details */
+.detail-section {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+/* How to Pay Steps */
+.steps-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  background: var(--primary-blue);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loading-content {
+  text-align: center;
+  color: white;
+}
+
+.loading-content i {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* Mobile Styles */
+@media screen and (max-width: 768px) {
+  .payment-confirmation-page {
+    padding: 1rem;
+  }
+
+  .payment-status-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .payment-status-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .bank-account {
+    flex-direction: column;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .account-number {
+    font-size: 1.2rem;
+  }
+
+  .total-amount {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  .detail-section {
+    padding: 0.75rem;
+  }
+
+  .detail-row {
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+  }
+
+  .step {
+    padding: 0.5rem 0;
+  }
+
+  .step-number {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+  }
+}
+

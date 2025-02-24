@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistem Booking Lapangan</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  </head>
+  <body>
+    <div class="app-container">
+      <header>
+        <div class="header-content">
+          <img src="assets/VICTORY1.png" alt="Victory Logo" class="logo" />
+        </div>
+      </header>
+
+      <!-- Tambahkan setelah header dan sebelum main-content -->
+      <div class="floating-cart" id="floatingCart" style="display: none;">
+        <div class="cart-icon">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-badge" id="cartCount">0</span>
+        </div>
+        <div class="cart-total" id="cartTotal">Rp 0</div>
+        <button class="view-cart-btn" onclick="showCartDetails()">
+          View Details
+        </button>
+      </div>
+
+      <div class="main-content">
+        <div class="title-section">
+          <div class="city-selector">
+            <div class="select-wrapper">
+              <i class="fas fa-map-marker-alt"></i>
+              <select id="citySelect">
+                <option value="">Pilih Kota</option>
+              </select>
+            </div>
+          </div>
+          <h2>Choose the available schedule & field</h2>
+          <button class="calendar-icon-container" onclick="showCourtDetails()">
+            <i class="fas fa-calendar-alt"></i>
+          </button>
+        </div>
+
+        <div class="week-navigation">
+          <button class="nav-btn prev-week">
+            <i class="fas fa-chevron-left"></i>
+            Previous Week
+          </button>
+          <div class="current-month">February 2025</div>
+          <button class="nav-btn next-week">
+            <i class="fas fa-chevron-right"></i>
+            Next Week
+          </button>
+        </div>
+
+        <div class="date-selector">
+          <div class="weekdays">
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+          </div>
+          <div class="dates">
+            <button class="date-btn">
+              <span class="date">12</span>
+              <span class="month">Feb</span>
+            </button>
+            <button class="date-btn selected">
+              <span class="date">13</span>
+              <span class="month">Feb</span>
+            </button>
+            <!-- Tambahkan tombol tanggal lainnya -->
+          </div>
+        </div>
+
+        <div class="schedule-grid">
+          <div class="time-column">
+            <!-- Slot waktu akan diisi oleh JavaScript -->
+          </div>
+          <div class="courts-container">
+            <div class="court-headers">
+              <div class="court-header">Court 1</div>
+              <div class="court-header">Court 2</div>
+              <div class="court-header">Court 3</div>
+              <div class="court-header">Court 4</div>
+              <div class="court-header">Court 5</div>
+            </div>
+            <div class="courts-grid">
+              <!-- Grid lapangan akan diisi oleh JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Tambahkan modal popup -->
+        <div id="courtDetailsModal" class="modal">
+          <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Court Details</h2>
+            <div class="court-details-grid">
+              <!-- Court details akan di-render secara dinamis -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Tambahkan di dalam modal booking -->
+        <div id="bookingModal" class="modal">
+          <div class="modal-content booking-modal">
+            <span class="close-btn">&times;</span>
+            <h2>Booking Details</h2>
+
+            <div class="booking-info">
+              <div class="booking-header">
+                <h3>Booking Information</h3>
+              </div>
+              
+              <div class="booking-content">
+                <div class="location-info">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <span id="selectedCityBranch"></span>
+                </div>
+
+                <div class="courts-info">
+                  <div class="courts-list" id="selectedCourt">
+                    <!-- Courts will be populated here -->
+                  </div>
+                </div>
+
+                <div class="booking-meta">
+                  <div class="meta-item">
+                    <i class="fas fa-calendar"></i>
+                    <span id="selectedDate"></span>
+                  </div>
+                  <div class="meta-item">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span id="pricePerHour"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="snacks-section">
+              <h3>Add Snacks & Drinks (Optional)</h3>
+              <div class="swiper snacks-swiper">
+                <div class="swiper-wrapper">
+                  <!-- Items akan di-render secara dinamis dari SNACKS_DATA -->
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+              </div>
+            </div>
+
+            <div class="booking-summary">
+              <h3>Summary</h3>
+              <div class="summary-items">
+                <p>Court Fee: <span>Rp 100.000</span></p>
+                <div id="snacksSummary"></div>
+                <div class="total">
+                  <strong>Total: <span id="totalAmount">Rp 100.000</span></strong>
+                </div>
+              </div>
+              <button class="next-btn" onclick="proceedToPayment()">Next</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tambahkan modal payment -->
+        <div id="paymentModal" class="modal">
+          <div class="modal-content payment-modal">
+            <span class="close-btn">&times;</span>
+            <!-- Tambahkan tombol back -->
+            <div class="modal-header">
+              <button class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back
+              </button>
+              <h2>Payment Details</h2>
+            </div>
+            
+            <div class="payment-form">
+              <!-- Promo Code Section -->
+              <div class="promo-section">
+                <h3>Have a promo code?</h3>
+                <div class="promo-input">
+                  <input type="text" id="promoCode" placeholder="Enter promo code">
+                  <button class="apply-promo-btn">Apply</button>
+                </div>
+              </div>
+
+              <!-- Payment Options -->
+              <div class="payment-options">
+                <h3>Payment Method</h3>
+                <div class="payment-type">
+                  <div class="payment-choice">
+                    <input type="radio" id="fullPayment" name="paymentType" value="full" checked>
+                    <label for="fullPayment">
+                      <span class="payment-label">Full Payment</span>
+                      <span class="payment-amount" id="fullPaymentAmount">Rp 100.000</span>
+                    </label>
+                  </div>
+                  <div class="payment-choice">
+                    <input type="radio" id="dpPayment" name="paymentType" value="dp">
+                    <label for="dpPayment">
+                      <span class="payment-label">Down Payment (50%)</span>
+                      <span class="payment-amount" id="dpPaymentAmount">Rp 50.000</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Payment Methods -->
+                <div class="payment-methods">
+                  <h3>Select Payment Method</h3>
+                  
+                  <!-- Bank Transfer Options -->
+                  <div class="method-group">
+                    <h4>Bank Transfer</h4>
+                    <div class="method-choice">
+                      <input type="radio" 
+                        name="paymentMethod" 
+                        data-type="bank" 
+                        data-provider="bca" 
+                        id="bca">
+                      <label for="bca" class="payment-method-label">
+                        <div class="payment-method-logo">
+                          <img src="assets/payment/bca.png" alt="BCA" class="bank-logo">
+                        </div>
+                        <span>BCA</span>
+                      </label>
+                    </div>
+                    <div class="method-choice">
+                      <input type="radio" 
+                        name="paymentMethod" 
+                        data-type="bank" 
+                        data-provider="mandiri" 
+                        id="mandiri">
+                      <label for="mandiri" class="payment-method-label">
+                        <div class="payment-method-logo">
+                          <img src="assets/payment/mandiri.png" alt="Mandiri" class="bank-logo">
+                        </div>
+                        <span>Mandiri</span>
+                      </label>
+                    </div>
+                    <div class="method-choice">
+                      <input type="radio" 
+                        name="paymentMethod" 
+                        data-type="bank" 
+                        data-provider="bni" 
+                        id="bni">
+                      <label for="bni" class="payment-method-label">
+                        <div class="payment-method-logo">
+                          <img src="assets/payment/bni.png" alt="BNI" class="bank-logo">
+                        </div>
+                        <span>BNI</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- E-Wallet Options -->
+                  <div class="method-group">
+                    <h4>E-Wallet</h4>
+                    <div class="method-choice">
+                      <input type="radio" 
+                        name="paymentMethod" 
+                        data-type="ewallet" 
+                        data-provider="ovo" 
+                        id="ovo">
+                      <label for="ovo" class="payment-method-label">
+                        <div class="payment-method-logo">
+                          <img src="assets/payment/ovo.png" alt="OVO" class="bank-logo">
+                        </div>
+                        <span>OVO</span>
+                      </label>
+                    </div>
+                    <div class="method-choice">
+                      <input type="radio" 
+                        name="paymentMethod" 
+                        data-type="ewallet" 
+                        data-provider="gopay" 
+                        id="gopay">
+                      <label for="gopay" class="payment-method-label">
+                        <div class="payment-method-logo">
+                          <img src="assets/payment/gopay.png" alt="GoPay" class="bank-logo">
+                        </div>
+                        <span>GoPay</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Payment Summary -->
+              <div class="payment-summary">
+                <h3>Payment Summary</h3>
+                <div class="summary-details">
+                  <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="subtotalAmount">Rp 100.000</span>
+                  </div>
+                  <div class="summary-row" id="promoRow" style="display: none;">
+                    <span>Promo Discount</span>
+                    <span id="promoAmount">-Rp 0</span>
+                  </div>
+                  <div class="summary-row total">
+                    <strong>Total Payment</strong>
+                    <strong id="finalAmount">Rp 100.000</strong>
+                  </div>
+                </div>
+
+                <div class="payment-note" id="dpNote" style="display: none;">
+                  <i class="fas fa-info-circle"></i>
+                  <p>Please complete the remaining payment within 1 hour to confirm your booking</p>
+                </div>
+
+                <button class="confirm-payment-btn">Confirm Payment</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tambahkan modal cart sebelum penutup div app-container -->
+      <div id="cartModal" class="modal">
+        <div class="modal-content cart-modal">
+          <span class="close-btn">&times;</span>
+          <h2>Cart Details</h2>
+          <div class="cart-items" id="cartItems">
+            <!-- Items will be populated dynamically -->
+          </div>
+          <div class="cart-summary">
+            <div class="cart-total">
+              <span>Total</span>
+              <span id="modalCartTotal">Rp 0</span>
+            </div>
+            <button class="checkout-btn" onclick="proceedToCheckout()">
+              Proceed to Checkout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  </body>
+</html>
