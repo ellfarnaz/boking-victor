@@ -145,7 +145,7 @@ header {
 /* Pastikan tinggi slot waktu dan court sama */
 .time-slot,
 .court-slot {
-  height: 80px;
+  height: 50px;
   padding: 1rem;
   display: flex;
   align-items: center;
@@ -1636,16 +1636,16 @@ header {
 /* Floating Cart Styles */
 .floating-cart {
   position: fixed;
-  bottom: 20px;
+  bottom: 80px;
   right: 20px;
-  background: var(--primary-blue);
+  background: rgba(75, 105, 191, 0.95);
   padding: 12px 20px;
   border-radius: 50px;
   display: flex;
   align-items: center;
   gap: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  z-index: 100;
+  z-index: 1001;
   transition: all 0.3s ease;
 }
 
@@ -2297,5 +2297,61 @@ header {
     height: 28px;
     font-size: 0.9rem;
   }
+}
+
+.navigation-menu {
+  display: flex;
+  justify-content: space-around;
+  background-color: #4b69bf; /* Warna latar belakang menu */
+  padding: 0.1rem 0; /* Padding atas dan bawah */
+  position: fixed; /* Posisi tetap di bagian bawah */
+  bottom: 0; /* Menempel di bagian bawah */
+  width: 100%; /* Lebar penuh */
+  max-width: 1170px; /* Atur lebar maksimum */
+  left: 50%; /* Pusatkan menu */
+  transform: translateX(-50%); /* Pusatkan menu */
+  z-index: 1000; /* Pastikan di atas elemen lain */
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2); /* Bayangan untuk efek kedalaman */
+  border-radius: 10px 10px 0 0; /* Sudut membulat di atas */
+}
+
+.nav-item {
+  flex: 1; /* Membuat semua item menu memiliki lebar yang sama */
+  display: flex;
+  flex-direction: column; /* Mengatur arah flex menjadi kolom */
+  align-items: center; /* Mengatur item agar berada di tengah */
+  color: white; /* Warna teks */
+  text-decoration: none; /* Menghilangkan garis bawah */
+  font-size: 1rem; /* Ukuran font */
+  transition: color 0.3s, transform 0.3s; /* Transisi warna dan transformasi */
+  position: relative; /* Untuk efek hover */
+  padding: 10px; /* Tambahkan padding untuk memperbesar area klik */
+}
+
+.nav-item i {
+  font-size: 1.5rem; /* Ukuran ikon */
+  margin-bottom: 0.5rem; /* Jarak antara ikon dan teks */
+}
+
+.nav-item:hover {
+  color: rgba(255, 255, 255, 0.8); /* Warna saat hover */
+  transform: translateY(-3px); /* Efek angkat saat hover */
+}
+
+.nav-item::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.8); /* Garis bawah */
+  transform: scaleX(0); /* Mulai dari 0 */
+  transition: transform 0.3s; /* Transisi untuk efek */
+  position: absolute;
+  left: 0;
+  bottom: -5px; /* Posisi garis bawah */
+}
+
+.nav-item:hover::after {
+  transform: scaleX(1); /* Memperbesar garis bawah saat hover */
 }
 
